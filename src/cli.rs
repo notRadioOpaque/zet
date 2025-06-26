@@ -15,5 +15,7 @@ pub enum Commands {
         /// the title of the note
         title: String,
     },
+    /// list all notes
+    List,
     // other commands to be added here...
 }

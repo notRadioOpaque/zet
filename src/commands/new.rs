@@ -33,7 +33,7 @@ tags: []
     }
 
     fs::write(&file_path, content)?;
-    println!("note created: {}", file_path);
+    println!("🎉 note created: {}", file_path);
 
     Ok(())
 }
