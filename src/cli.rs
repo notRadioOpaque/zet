@@ -12,10 +12,14 @@ pub struct Cli {
 #[derive(Subcommand, Debug)]
 pub enum Commands {
     New {
-        /// the title of the note
+        /// The title of the note
         title: String,
     },
-    /// list all notes
+    /// List all notes
     List,
-    // other commands to be added here...
+    /// Edit an existing note in your $EDITOR
+    Edit {
+        /// The slug of the note (without .md)
+        slug: String,
+    },
 }

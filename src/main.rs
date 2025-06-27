@@ -4,6 +4,8 @@ mod utils;
 
 use clap::Parser;
 use cli::{Cli, Commands};
+
+use commands::edit::edit_note;
 use commands::list::list_notes;
 use commands::new::create_note;
 
@@ -16,6 +18,7 @@ fn main() {
             create_note(transformed_title)
         }
         Commands::List => list_notes(),
+        Commands::Edit { slug } => edit_note(slug),
     };
 
     if let Err(err) = result {
