@@ -22,4 +22,9 @@ pub enum Commands {
         /// The slug of the note (without .md)
         slug: String,
     },
+    /// View the selected notes as Markdown
+    View {
+        /// the slug of the note (without .md)
+        slug: String,
+    },
 }

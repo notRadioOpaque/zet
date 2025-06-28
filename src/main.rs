@@ -8,6 +8,7 @@ use cli::{Cli, Commands};
 use commands::edit::edit_note;
 use commands::list::list_notes;
 use commands::new::create_note;
+use commands::view::view_note;
 
 fn main() {
     let cli = Cli::parse();
@@ -19,6 +20,7 @@ fn main() {
         }
         Commands::List => list_notes(),
         Commands::Edit { slug } => edit_note(slug),
+        Commands::View { slug } => view_note(slug),
     };
 
     if let Err(err) = result {
