@@ -27,4 +27,6 @@ pub enum Commands {
         /// the slug of the note (without .md)
         slug: String,
     },
+    /// Launch interactive fuzzy search UI
+    Search,
 }

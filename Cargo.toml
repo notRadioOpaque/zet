@@ -7,3 +7,4 @@ edition = "2024"
 clap = { version = "4.4", features = ["derive"] }
 chrono = "0.4"
 termimad = "0.25"
+skim = "0.20.1"

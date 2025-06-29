@@ -8,6 +8,7 @@ use cli::{Cli, Commands};
 use commands::edit::edit_note;
 use commands::list::list_notes;
 use commands::new::create_note;
+use commands::search::interactive_search;
 use commands::view::view_note;
 
 fn main() {
@@ -21,6 +22,7 @@ fn main() {
         Commands::List => list_notes(),
         Commands::Edit { slug } => edit_note(slug),
         Commands::View { slug } => view_note(slug),
+        Commands::Search => interactive_search(),
     };
 
     if let Err(err) = result {
