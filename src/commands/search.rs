@@ -24,10 +24,30 @@ pub fn interactive_search() -> Result<(), Box<dyn Error>> {
                 .unwrap_or_default();
 
             let file_content = fs::read_to_string(&path).unwrap_or_default();
-            let title_line = file_content.lines().next().unwrap_or("");
+
+            let mut title = "";
+            let mut in_frontmatter = false;
+
+            for line in file_content.lines() {
+                let line = line.trim();
+
+                if line == "---" {
+                    if !in_frontmatter {
+                        in_frontmatter = true;
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+
+                if in_frontmatter && line.starts_with("title:") {
+                    title = line.trim_start_matches("title:").trim();
+                    break;
+                }
+            }
 
             // format: slug === title preview
-            entries.push(format!("{} => {}", slug, title_line));
+            entries.push(format!("{} => {}", slug, title));
         }
     }
 
@@ -52,9 +72,6 @@ pub fn interactive_search() -> Result<(), Box<dyn Error>> {
 
     drop(tx);
 
-    // let input = entries.join("\n");
-    // let cursor = Cursor::new(input.into_bytes());
-
     let selected = Skim::run_with(&options, Some(rx))
         .map(|out| out.selected_items)
         .unwrap_or_default();
@@ -62,7 +79,7 @@ pub fn interactive_search() -> Result<(), Box<dyn Error>> {
     if let Some(item) = selected.first() {
         // parse "slug ==> title"
         let rough_format = item.output();
-        let slug = rough_format.split("==>").next().unwrap().trim();
+        let slug = rough_format.split("=>").next().unwrap().trim();
         view_note(slug)?
     };
 
