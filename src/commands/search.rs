@@ -57,10 +57,13 @@ pub fn interactive_search() -> Result<(), Box<dyn Error>> {
         return Ok(());
     }
 
+    const PREVIEW_CMD: &str = "command -v bat >/dev/null && bat --style=plain --color=always notes/{1}.md || cat notes/{1}.md";
+
     let options = SkimOptionsBuilder::default()
         .height("60%".to_string())
         .prompt("🔍 Search notes: ".to_string())
-        .preview(None)
+        .preview(Some(PREVIEW_CMD.to_string()))
+        .preview_window("right:50%".to_string())
         .multi(false)
         .build()?;
 
