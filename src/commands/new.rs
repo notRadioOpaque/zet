@@ -1,4 +1,4 @@
-use crate::utils::slugify;
+use crate::utils::{slugify, validate_tags};
 use chrono::Local;
 use std::error::Error;
 use std::fs;
@@ -14,11 +14,7 @@ pub fn create_note(title: &str, tags: Option<&str>) -> Result<(), Box<dyn Error>
     let file_path = format!("notes/{}.md", slug);
 
     let tag_list = match tags {
-        Some(t) => t
-            .split(',')
-            .map(|s| s.trim().to_string())
-            .filter(|s| !s.is_empty())
-            .collect::<Vec<_>>(),
+        Some(t) => validate_tags(t)?,
         None => vec![],
     };
 
