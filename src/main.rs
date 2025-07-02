@@ -15,9 +15,9 @@ fn main() {
     let cli = Cli::parse();
 
     let result = match &cli.command {
-        Commands::New { title } => {
+        Commands::New { title, tags } => {
             let transformed_title = title.trim_matches(|c| c == '"' || c == '\'');
-            create_note(transformed_title)
+            create_note(transformed_title, tags.as_deref())
         }
         Commands::List => list_notes(),
         Commands::Edit { slug } => edit_note(slug),

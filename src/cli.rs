@@ -14,6 +14,10 @@ pub enum Commands {
     New {
         /// The title of the note
         title: String,
+
+        /// Comma separated tags (e.g rust, zettelkasten)
+        #[arg(short, long)]
+        tags: Option<String>,
     },
     /// List all notes
     List,

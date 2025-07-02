@@ -4,7 +4,7 @@ use std::error::Error;
 use std::fs;
 use std::path::Path;
 
-pub fn create_note(title: &str) -> Result<(), Box<dyn Error>> {
+pub fn create_note(title: &str, tags: Option<&str>) -> Result<(), Box<dyn Error>> {
     if title.trim().is_empty() {
         return Err("Title cannot be empty".into());
     }
@@ -13,11 +13,26 @@ pub fn create_note(title: &str) -> Result<(), Box<dyn Error>> {
     let slug = slugify(title);
     let file_path = format!("notes/{}.md", slug);
 
+    let tag_list = match tags {
+        Some(t) => t
+            .split(',')
+            .map(|s| s.trim().to_string())
+            .filter(|s| !s.is_empty())
+            .collect::<Vec<_>>(),
+        None => vec![],
+    };
+
+    let tags_yaml = if tag_list.is_empty() {
+        "[]".to_string()
+    } else {
+        format!("[{}]", tag_list.join(","))
+    };
+
     let content = format!(
         r#"---
 title: {}
 date: {}
-tags: []
+tags: {}
 ---
 
 # {}
@@ -25,7 +40,7 @@ tags: []
 <!-- Start writing your note below -->
 
 "#,
-        title, date, title
+        title, date, tags_yaml, title
     );
 
     if !Path::new("notes").exists() {
