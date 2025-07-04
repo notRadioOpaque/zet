@@ -4,10 +4,10 @@ use std::collections::HashSet;
 /// Struct to represent parsed YAML metadata
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Frontmatter {
-    title: String,
-    date: String,
+    pub title: String,
+    pub date: String,
     #[serde(default)]
-    tags: Vec<String>,
+    pub tags: Vec<String>,
 }
 
 /// Parse YAML Frontmatter block from note content

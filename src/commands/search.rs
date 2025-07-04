@@ -1,8 +1,7 @@
-use std::{error::Error, fs, path::Path};
-
-use skim::prelude::*;
-
 use super::view::view_note;
+use crate::utils::frontmatter::parse_frontmatter;
+use skim::prelude::*;
+use std::{error::Error, fs, path::Path};
 
 pub fn interactive_search() -> Result<(), Box<dyn Error>> {
     let notes_dir = Path::new("notes");
@@ -17,38 +16,24 @@ pub fn interactive_search() -> Result<(), Box<dyn Error>> {
         let entry = entry?;
         let path = entry.path();
 
-        if path.extension().and_then(|s| s.to_str()) == Some("md") {
-            let slug = path
-                .file_stem()
-                .and_then(|s| s.to_str())
-                .unwrap_or_default();
-
-            let file_content = fs::read_to_string(&path).unwrap_or_default();
-
-            let mut title = "";
-            let mut in_frontmatter = false;
-
-            for line in file_content.lines() {
-                let line = line.trim();
-
-                if line == "---" {
-                    if !in_frontmatter {
-                        in_frontmatter = true;
-                        continue;
-                    } else {
-                        break;
-                    }
-                }
-
-                if in_frontmatter && line.starts_with("title:") {
-                    title = line.trim_start_matches("title:").trim();
-                    break;
-                }
-            }
-
-            // format: slug === title preview
-            entries.push(format!("{} => {}", slug, title));
+        if path.extension().and_then(|s| s.to_str()) != Some("md") {
+            continue;
         }
+
+        let slug = path
+            .file_stem()
+            .and_then(|s| s.to_str())
+            .unwrap_or_default();
+
+        let content = fs::read_to_string(&path)?;
+
+        let frontmatter = match parse_frontmatter(&content, slug) {
+            Ok(fm) => fm,
+            Err(_) => continue, // skips if frontmatter is invalid or absent
+        };
+
+        // format: slug => title preview
+        entries.push(format!("{} => {}", slug, frontmatter.title));
     }
 
     if entries.is_empty() {
