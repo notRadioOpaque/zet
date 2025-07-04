@@ -1,5 +1,5 @@
 use crate::utils::frontmatter::Frontmatter;
-use crate::utils::utils::{slugify, validate_tags};
+use crate::utils::utils::{build_note_content, slugify, validate_tags};
 use chrono::Local;
 use std::error::Error;
 use std::fs;
@@ -25,10 +25,8 @@ pub fn create_note(title: &str, tags: Option<&str>) -> Result<(), Box<dyn Error>
         tags: tag_list,
     };
 
-    let yaml = serde_yaml::to_string(&frontmatter)?;
     let body = format!("# {}\n\n<!-- Start writing your note below -->\n", title);
-
-    let content = format!("---\n{}---\n{}", yaml, body);
+    let content = build_note_content(&frontmatter, &body)?;
 
     if !Path::new("notes").exists() {
         fs::create_dir("notes").expect("Failed to create directory");

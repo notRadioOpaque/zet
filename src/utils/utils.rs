@@ -1,3 +1,6 @@
+use crate::utils::frontmatter::Frontmatter;
+use std::error::Error;
+
 pub fn slugify(title: &str) -> String {
     title.to_lowercase().replace(' ', "-")
 }
@@ -31,4 +34,16 @@ pub fn validate_tags(raw: &str) -> Result<Vec<String>, String> {
     }
 
     Ok(clean_tags)
+}
+
+pub fn build_note_content(frontmatter: &Frontmatter, body: &str) -> Result<String, Box<dyn Error>> {
+    let tags_inline = format!("[{}]", frontmatter.tags.join(", "));
+
+    let yaml = format!(
+        "title: {}\ndate: {}\ntags: {}\n",
+        frontmatter.title, frontmatter.date, tags_inline
+    );
+
+    let content = format!("---\n{}---\n\n{}", yaml, body);
+    Ok(content)
 }

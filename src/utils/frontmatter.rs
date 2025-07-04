@@ -6,6 +6,7 @@ use std::collections::HashSet;
 pub struct Frontmatter {
     pub title: String,
     pub date: String,
+
     #[serde(default)]
     pub tags: Vec<String>,
 }
