@@ -1,4 +1,4 @@
-use crate::utils::{slugify, validate_tags};
+use crate::utils::utils::{slugify, validate_tags};
 use chrono::Local;
 use std::error::Error;
 use std::fs;
@@ -15,7 +15,7 @@ pub fn create_note(title: &str, tags: Option<&str>) -> Result<(), Box<dyn Error>
 
     let tag_list = match tags {
         Some(t) => validate_tags(t)?,
-        None => vec![],
+        _ => vec![],
     };
 
     let tags_yaml = if tag_list.is_empty() {
