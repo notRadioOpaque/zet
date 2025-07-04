@@ -1,4 +1,4 @@
-use crate::utils::frontmatter::Frontmatter;
+use crate::utils::frontmatter::{Frontmatter, detect_duplicate_tags};
 use std::error::Error;
 
 pub fn slugify(title: &str) -> String {
@@ -6,7 +6,6 @@ pub fn slugify(title: &str) -> String {
 }
 
 pub fn validate_tags(raw: &str) -> Result<Vec<String>, String> {
-    let mut seen = std::collections::HashSet::new();
     let mut clean_tags = Vec::new();
 
     for tag in raw.split(',') {
@@ -16,22 +15,17 @@ pub fn validate_tags(raw: &str) -> Result<Vec<String>, String> {
             continue;
         }
 
-        if !tag
-            .chars()
-            .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_')
-        {
+        if !is_valid_tag(tag) {
             return Err(format!(
                 "Tag `{}` contains invalid characters. Only alphanumeric, `_`, `-` are allowed.",
                 tag
             ));
         }
 
-        if !seen.insert(tag.to_lowercase()) {
-            return Err(format!("Duplicate tag detected: `{}`", tag));
-        }
-
         clean_tags.push(tag.to_string());
     }
+
+    detect_duplicate_tags(&clean_tags);
 
     Ok(clean_tags)
 }
@@ -46,4 +40,9 @@ pub fn build_note_content(frontmatter: &Frontmatter, body: &str) -> Result<Strin
 
     let content = format!("---\n{}---\n\n{}", yaml, body);
     Ok(content)
+}
+
+fn is_valid_tag(tag: &str) -> bool {
+    tag.chars()
+        .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_')
 }

@@ -33,4 +33,10 @@ pub enum Commands {
     },
     /// Launch interactive fuzzy search UI
     Search,
+    /// Check for Errors in notes
+    Lint {
+        /// Fix issues automatically
+        #[arg(long)]
+        fix: bool,
+    },
 }
