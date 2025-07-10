@@ -1,6 +1,6 @@
-use super::view::view_note;
+// use super::view::view_note;
 use crate::utils::frontmatter::parse_frontmatter;
-use skim::prelude::*;
+// use skim::prelude::*;
 use std::{error::Error, fs, path::Path};
 
 pub fn interactive_search() -> Result<(), Box<dyn Error>> {
@@ -44,32 +44,32 @@ pub fn interactive_search() -> Result<(), Box<dyn Error>> {
 
     const PREVIEW_CMD: &str = "command -v bat >/dev/null && bat --style=plain --color=always notes/{1}.md || cat notes/{1}.md";
 
-    let options = SkimOptionsBuilder::default()
-        .height("60%".to_string())
-        .prompt("🔍 Search notes: ".to_string())
-        .preview(Some(PREVIEW_CMD.to_string()))
-        .preview_window("right:50%".to_string())
-        .multi(false)
-        .build()?;
+    // let options = SkimOptionsBuilder::default()
+    //     .height("60%".to_string())
+    //     .prompt("🔍 Search notes: ".to_string())
+    //     .preview(Some(PREVIEW_CMD.to_string()))
+    //     .preview_window("right:50%".to_string())
+    //     .multi(false)
+    //     .build()?;
 
-    let (tx, rx): (SkimItemSender, SkimItemReceiver) = unbounded();
+    // let (tx, rx): (SkimItemSender, SkimItemReceiver) = unbounded();
+    //
+    // for entry in entries {
+    //     let _ = tx.send(Arc::new(entry));
+    // }
+    //
+    // drop(tx);
 
-    for entry in entries {
-        let _ = tx.send(Arc::new(entry));
-    }
-
-    drop(tx);
-
-    let selected = Skim::run_with(&options, Some(rx))
-        .map(|out| out.selected_items)
-        .unwrap_or_default();
-
-    if let Some(item) = selected.first() {
-        // parse "slug ==> title"
-        let rough_format = item.output();
-        let slug = rough_format.split("=>").next().unwrap().trim();
-        view_note(slug)?
-    };
+    // let selected = Skim::run_with(&options, Some(rx))
+    //     .map(|out| out.selected_items)
+    //     .unwrap_or_default();
+    //
+    // if let Some(item) = selected.first() {
+    //     // parse "slug ==> title"
+    //     let rough_format = item.output();
+    //     let slug = rough_format.split("=>").next().unwrap().trim();
+    //     view_note(slug)?
+    // };
 
     Ok(())
 }

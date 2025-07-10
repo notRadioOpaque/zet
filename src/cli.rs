@@ -32,11 +32,13 @@ pub enum Commands {
         slug: String,
     },
     /// Launch interactive fuzzy search UI
-    Search,
+    // Search,
     /// Check for Errors in notes
     Lint {
         /// Fix issues automatically
         #[arg(long)]
         fix: bool,
     },
+    /// Launch the full-screen interactive interface
+    Tui,
 }
