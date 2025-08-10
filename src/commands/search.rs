@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 // use super::view::view_note;
 use crate::utils::frontmatter::parse_frontmatter;
 // use skim::prelude::*;
