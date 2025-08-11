@@ -1,9 +1,10 @@
+use crate::errors::AppError;
 use crate::utils::frontmatter::{dedup_tags, parse_frontmatter};
 use std::fs;
 use std::io::Write;
 use std::path::Path;
 
-pub fn lint_notes(fix: bool) -> Result<(), Box<dyn std::error::Error>> {
+pub fn lint_notes(fix: bool) -> Result<(), AppError> {
     let notes_dir = Path::new("notes");
     let entries = fs::read_dir(notes_dir)?;
 
@@ -39,7 +40,8 @@ pub fn lint_notes(fix: bool) -> Result<(), Box<dyn std::error::Error>> {
                 let sections: Vec<&str> = content.splitn(3, "---").collect();
                 let body = sections.get(2).unwrap_or(&"");
 
-                let yaml = serde_yaml::to_string(&frontmatter)?;
+                let yaml = serde_yaml::to_string(&frontmatter)
+                    .map_err(|e| AppError::FrontmatterSerialize(e))?;
                 let new_content = format!("---\n{}---{}", yaml, body);
 
                 let mut file = fs::File::create(&path)?;

@@ -1,13 +1,15 @@
-use std::{error::Error, fs, path::PathBuf};
+use std::{fs, path::PathBuf};
 
 use termimad::MadSkin;
 
-pub fn view_note(slug: &str) -> Result<(), Box<dyn Error>> {
+use crate::errors::AppError;
+
+pub fn view_note(slug: &str) -> Result<(), AppError> {
     let mut path = PathBuf::from("notes");
     path.push(format!("{}.md", slug));
 
     if !path.exists() {
-        return Err(format!("Note not found: {}", path.display()).into());
+        return Err(AppError::NoteNotFound(path.display().to_string()));
     }
 
     let content = fs::read_to_string(&path)?;

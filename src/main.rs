@@ -1,5 +1,6 @@
 mod cli;
 mod commands;
+mod errors;
 mod tui;
 mod utils;
 
@@ -11,8 +12,8 @@ use crate::commands::tui::run_tui;
 use commands::edit::edit_note;
 use commands::list::list_notes;
 use commands::new::create_note;
-// use commands::search::interactive_search;
 use commands::view::view_note;
+// use commands::search::interactive_search;
 
 fn main() {
     let cli = Cli::parse();
@@ -26,14 +27,7 @@ fn main() {
         Commands::Edit { slug } => edit_note(slug),
         Commands::View { slug } => view_note(slug),
         // Commands::Search => interactive_search(),
-        Commands::Lint { fix } => {
-            if let Err(err) = lint_notes(*fix) {
-                eprintln!("Error: {}", err);
-                std::process::exit(1);
-            }
-
-            Ok(())
-        }
+        Commands::Lint { fix } => lint_notes(*fix),
         Commands::Tui => {
             if let Err(err) = run_tui() {
                 eprintln!("TUI error: {}", err);
@@ -45,7 +39,7 @@ fn main() {
     };
 
     if let Err(err) = result {
-        eprintln!("Error: {}", err);
+        eprintln!("{:?}", err);
         std::process::exit(1);
     }
 }

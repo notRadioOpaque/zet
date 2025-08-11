@@ -7,4 +7,3 @@ pub fn run_tui() -> color_eyre::Result<()> {
     ratatui::restore();
     result
 }
-

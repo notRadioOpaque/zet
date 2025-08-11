@@ -1,8 +1,9 @@
-use std::error::Error;
 use std::fs;
 use std::path::Path;
 
-pub fn list_notes() -> Result<(), Box<dyn Error>> {
+use crate::errors::AppError;
+
+pub fn list_notes() -> Result<(), AppError> {
     let notes_dir = Path::new("notes");
 
     if !notes_dir.exists() {
