@@ -6,11 +6,11 @@ use clap::{Parser, Subcommand};
 
 pub struct Cli {
     #[command(subcommand)]
-    pub command: Commands,
+    pub command: Command,
 }
 
 #[derive(Subcommand, Debug)]
-pub enum Commands {
+pub enum Command {
     New {
         /// The title of the note
         title: String,

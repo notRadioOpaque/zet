@@ -7,7 +7,7 @@ mod tui;
 
 use clap::Parser;
 
-use args::{Cli, Commands};
+use args::{Cli, Command};
 
 use cli::edit::edit_note;
 use cli::lint::lint_notes;
@@ -17,18 +17,18 @@ use cli::tui::run_tui;
 use cli::view::view_note;
 
 fn main() {
-    let cli: Cli = Cli::parse();
+    let cli = Cli::parse();
 
     let result = match &cli.command {
-        Commands::New { title, tags } => {
+        Command::New { title, tags } => {
             let transformed_title = title.trim_matches(|c| c == '"' || c == '\'');
             create_note(transformed_title, tags.as_deref())
         }
-        Commands::List => list_notes(),
-        Commands::Edit { slug } => edit_note(slug),
-        Commands::View { slug } => view_note(slug),
-        Commands::Lint { fix } => lint_notes(*fix),
-        Commands::Tui => {
+        Command::List => list_notes(),
+        Command::Edit { slug } => edit_note(slug),
+        Command::View { slug } => view_note(slug),
+        Command::Lint { fix } => lint_notes(*fix),
+        Command::Tui => {
             if let Err(err) = run_tui() {
                 eprintln!("TUI error: {}", err);
                 std::process::exit(1);
