@@ -1,22 +1,23 @@
+mod args;
 mod cli;
-mod commands;
+mod core;
 mod errors;
+mod storage;
 mod tui;
-mod utils;
 
 use clap::Parser;
-use cli::{Cli, Commands};
 
-use crate::commands::lint::lint_notes;
-use crate::commands::tui::run_tui;
-use commands::edit::edit_note;
-use commands::list::list_notes;
-use commands::new::create_note;
-use commands::view::view_note;
-// use commands::search::interactive_search;
+use args::{Cli, Commands};
+
+use cli::edit::edit_note;
+use cli::lint::lint_notes;
+use cli::list::list_notes;
+use cli::new::create_note;
+use cli::tui::run_tui;
+use cli::view::view_note;
 
 fn main() {
-    let cli = Cli::parse();
+    let cli: Cli = Cli::parse();
 
     let result = match &cli.command {
         Commands::New { title, tags } => {
@@ -26,7 +27,6 @@ fn main() {
         Commands::List => list_notes(),
         Commands::Edit { slug } => edit_note(slug),
         Commands::View { slug } => view_note(slug),
-        // Commands::Search => interactive_search(),
         Commands::Lint { fix } => lint_notes(*fix),
         Commands::Tui => {
             if let Err(err) = run_tui() {
@@ -39,7 +39,7 @@ fn main() {
     };
 
     if let Err(err) = result {
-        eprintln!("{:?}", err);
+        eprintln!("{}", err);
         std::process::exit(1);
     }
 }
