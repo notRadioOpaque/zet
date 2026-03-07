@@ -39,6 +39,8 @@ pub enum Command {
         #[arg(long)]
         fix: bool,
     },
+    /// Get Note count
+    Stats,
     /// Launch the full-screen interactive interface
     Tui,
 }
