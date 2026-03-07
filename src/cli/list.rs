@@ -11,9 +11,15 @@ pub fn list_notes() -> Result<(), AppError> {
         return Ok(());
     }
 
-    println!("Notes:\n");
+    println!("Notes (slug | date | tags):\n");
     for (i, note) in notes.iter().enumerate() {
-        println!("{}. {}.md", i + 1, note.slug);
+        let tags_display = if note.tags.is_empty() {
+            String::new()
+        } else {
+            format!(" | tags: {}", note.tags.join(", "))
+        };
+
+        println!("{}. {} | {}{}", i + 1, note.slug, note.date, tags_display);
     }
 
     Ok(())
