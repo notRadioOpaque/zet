@@ -5,7 +5,6 @@ use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind, KeyModifier
 ///
 /// If your application needs to perform work in between handling events, you can use the
 /// [`event::poll`] function to check if there are any events available with a timeout.
-
 pub fn handle_crossterm_events(app: &mut App) -> Result<()> {
     match event::read()? {
         // it's important to check KeyEventKind::Press to avoid handling key release events

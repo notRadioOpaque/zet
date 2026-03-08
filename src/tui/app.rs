@@ -21,7 +21,7 @@ impl App {
     pub fn run(mut self, mut terminal: DefaultTerminal) -> Result<()> {
         self.running = true;
         while self.running {
-            terminal.draw(|frame| ui::render(frame))?;
+            terminal.draw(ui::render)?;
             events::handle_crossterm_events(&mut self)?;
         }
         Ok(())
