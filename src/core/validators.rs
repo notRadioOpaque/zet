@@ -53,3 +53,31 @@ pub fn has_duplicate_tags(tags: &[String]) -> bool {
     }
     false
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn validate_tags_accepts_valid_tags() {
+        let result = validate_tags("rust, zet_notes, cli-tool").unwrap();
+        assert_eq!(result, vec!["rust", "zet_notes", "cli-tool"]);
+    }
+
+    #[test]
+    fn validate_tags_rejects_invalid_tags() {
+        let result = validate_tags("rust, zet_notes, cli-tool!");
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn duplicate_tag_detection_and_dedup_are_case_insensitive() {
+        let tags = vec!["rust".to_string(), "Rust".to_string()];
+        assert!(has_duplicate_tags(&tags));
+
+        let mut tags_to_dedup = tags.clone();
+        dedup_tags(&mut tags_to_dedup);
+
+        assert_eq!(tags_to_dedup, vec!["rust".to_string()]);
+    }
+}
